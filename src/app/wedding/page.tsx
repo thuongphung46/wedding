@@ -1,20 +1,22 @@
 import Image from "next/image";
 
 interface WeddingPageProps {
-  params: {
+  params: Promise<{
     user: string;
     guestId: string;
-  };
+  }>;
 }
 
 // ✅ metadata theo params (Server Component)
-export function generateMetadata({ params }: WeddingPageProps) {
+export async function generateMetadata({ params }: WeddingPageProps) {
+  const { user, guestId } = await params;
+
   return {
-    title: `Thiệp cưới của ${params.user}`,
-    description: `Mời khách mời với mã ${params.guestId}`,
+    title: `Thiệp cưới của ${user}`,
+    description: `Mời khách mời với mã ${guestId}`,
     openGraph: {
-      title: `Thiệp cưới của ${params.user}`,
-      description: `Xin chào khách mời có mã ${params.guestId}`,
+      title: `Thiệp cưới của ${user}`,
+      description: `Xin chào khách mời có mã ${guestId}`,
       images: [
         {
           url: "/wedding-fake.jpg",
@@ -27,8 +29,8 @@ export function generateMetadata({ params }: WeddingPageProps) {
   };
 }
 
-export default function WeddingPage({ params }: WeddingPageProps) {
-  const { user, guestId } = params;
+export default async function WeddingPage({ params }: WeddingPageProps) {
+  const { user, guestId } = await params;
 
   return (
     <div style={{ padding: 20, textAlign: "center" }}>
